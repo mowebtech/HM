@@ -24,6 +24,7 @@ if ( is_object( $wp_object_cache ) )
 
 do_action( 'activate_header' );
 
+
 /**
  * Adds an action hook specific to this page that fires on wp_head
  *

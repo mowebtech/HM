@@ -5,7 +5,7 @@
  * @param mixed $search_by
  * @return EM_Location
  */
-function em_get_location($id = false, $search_by = 'location_id') {
+function em_get_location($id = false, $search_by = 'location_id') { 
 	if( is_object($id) && get_class($id) == 'EM_Location' ){
 		return $id;
 	}else{
@@ -16,7 +16,7 @@ function em_get_location($id = false, $search_by = 'location_id') {
  * Object that holds location info and related functions
  * @author marcus
  */
-class EM_Location extends EM_Object {
+class EM_Location extends EM_Object { 
 	//DB Fields
 	var $location_id = '';
 	var $post_id = '';
@@ -183,7 +183,7 @@ class EM_Location extends EM_Object {
 	 * @param boolean $validate whether or not to run validation, default is true
 	 * @return boolean
 	 */
-	function get_post($validate = true){
+	function get_post($validate = true){ 
 	    global $allowedtags;
 		do_action('em_location_get_post_pre', $this);
 		$this->location_name = ( !empty($_POST['location_name']) ) ? wp_kses_data( stripslashes($_POST['location_name'])):'';
@@ -461,7 +461,7 @@ class EM_Location extends EM_Object {
 		return $status;
 	}
 
-	function load_similar($criteria){
+	function load_similar($criteria){ echo 'herere'; exit;
 		global $wpdb;
 		if( !empty($criteria['location_name']) && !empty($criteria['location_name']) && !empty($criteria['location_name']) ){
 			$locations_table = EM_LOCATIONS_TABLE; 
@@ -562,7 +562,7 @@ class EM_Location extends EM_Object {
 		return apply_filters('em_location_output_single', $this->output($format, $target), $this, $target);			
 	}
 	
-	function output($format, $target="html") {
+	function output($format, $target="html") { 
 		$location_string = $format;
 	 	//First let's do some conditional placeholder removals
 	 	for ($i = 0 ; $i < get_option('dbem_conditional_recursions',1); $i++){ //you can add nested recursions by modifying this setting in your wp_options table
@@ -624,17 +624,17 @@ class EM_Location extends EM_Object {
 					break;
 				case '#_ADDRESS': //Depricated
 				case '#_LOCATIONADDRESS': 
-					$replace = $this->location_address;
+					//$replace = $this->location_address;
 					break;
 				case '#_TOWN': //Depricated
 				case '#_LOCATIONTOWN':
-					$replace = $this->location_town;
+					//$replace = $this->location_town;
 					break;
 				case '#_LOCATIONSTATE':
-					$replace = $this->location_state;
+					//$replace = $this->location_state;
 					break;
 				case '#_LOCATIONPOSTCODE':
-					$replace = $this->location_postcode;
+					//$replace = $this->location_postcode;
 					break;
 				case '#_LOCATIONREGION':
 					$replace = $this->location_region;
@@ -766,6 +766,8 @@ class EM_Location extends EM_Object {
 						$replace = $EM_Event->output('#_EVENTLINK');
 					}
 					break;
+
+
 				default:
 					$replace = $full_result;
 					break;

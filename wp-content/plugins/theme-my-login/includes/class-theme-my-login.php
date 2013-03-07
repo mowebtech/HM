@@ -348,10 +348,23 @@ class Theme_My_Login {
 					}
                                         
                                         if ( $http_post ) {
-					
+					$level = $_POST['level'];
+                                        
+                                       /* echo "<pre>";
+                                        print_r($_POST);
+                                        exit;*/
+                                        if ( isset( $_POST['pass1'] ) && $_POST['pass1'] != $_POST['pass2'] ) {
+						$redirect_to = Theme_My_Login::get_current_url().'&action=profile&level='.$level.'&error=invalid';
+                                               
+                                                // $redirect_to = apply_filters( 'profile_update_step1_redirect', $redirect_to );
+                                                wp_safe_redirect( $redirect_to );
+                                                exit();
+					}
+                                            
+                                            
                                          $errors = Theme_My_Login::profile_update_step1( $_POST );
                                         
-                                         $level = $_POST['level'];
+                                         
                                         if (!is_wp_error( $errors ) ) {
                                                $user = wp_get_current_user();
                                                
@@ -362,7 +375,7 @@ class Theme_My_Login {
                                                 exit();
                                         }else{
                                             
-                                            $redirect_to = Theme_My_Login::get_current_url().'&action=profile&level='.$level.'&error=location';
+                                                $redirect_to = Theme_My_Login::get_current_url().'&action=profile&level='.$level.'&error=location';
                                                
                                                 // $redirect_to = apply_filters( 'profile_update_step1_redirect', $redirect_to );
                                                 wp_safe_redirect( $redirect_to );
@@ -372,7 +385,57 @@ class Theme_My_Login {
                                         }    
 					break;   
                                  
+                                case 'preference_update' :
+                                        // Redirect to login page if not logged in
+					if ( !is_user_logged_in() ) {
+						$redirect_to = $theme_my_login->get_login_page_link( array( 'reauth' => 1 ) );
+						wp_redirect( $redirect_to );
+						exit();
+					}
                                         
+                                        if ( $http_post ) {
+                                            
+                                             // check for password
+                                             if ( isset( $_POST['pass1'] ) && $_POST['pass1'] != $_POST['pass2'] ) {
+						$redirect_to = Theme_My_Login::get_current_url().'&action=preference&error=passowrd';
+                                               
+                                                // $redirect_to = apply_filters( 'profile_update_step1_redirect', $redirect_to );
+                                                wp_safe_redirect( $redirect_to );
+                                                exit();
+                                              }
+                                            $user_email = $_POST['email'];  
+                                            $user_email_reconfirm = wp_get_current_user()->user_email;
+                                            
+                                            // Check the reconfirm e-mail address
+                                            if ( '' == $user_email ) {
+                                                $redirect_to = Theme_My_Login::get_current_url().'&action=preference&error=email_null';
+                                                wp_safe_redirect( $redirect_to );
+                                                exit();
+                                            } elseif( !is_email( $user_email ) ) {
+                                                
+                                                $redirect_to = Theme_My_Login::get_current_url().'&action=preference&error=invalid';
+                                                wp_safe_redirect( $redirect_to );
+                                                exit();
+                                            } elseif($user_email != $user_email_reconfirm ) {
+                                               
+                                               if(email_exists($user_email)){ 
+                                                $redirect_to = Theme_My_Login::get_current_url().'&action=preference&error=already';
+                                                wp_safe_redirect( $redirect_to );
+                                                exit();
+                                               }
+                                            }
+            
+           
+                                              
+                                            Theme_My_Login::prefernce_update( $_POST );
+                                            $redirect_to = Theme_My_Login::get_current_url().'&action=preference&success=success';
+
+                                            // $redirect_to = apply_filters( 'profile_update_step1_redirect', $redirect_to );
+                                            wp_safe_redirect( $redirect_to );
+                                            exit();    
+					 
+                                        }
+                                    break;
                                 //end by user 1        
 				case 'login' :
 				default:
@@ -1303,7 +1366,11 @@ if(typeof wpOnload=='function')wpOnload()
                     $wpdb->insert( $wpdb->pmpro_memberships_users, array( 'user_id' => $user_id,'membership_id'=>$mebership_id ));
                 }
              }
-            
+             if( isset( $_POST['pass1'] ) && !empty( $_POST['pass1'] )){
+                $password =  $_POST['pass1'];
+                wp_update_user( array ('ID' => $user_id, 'user_pass' => $password) ) ;
+             }
+             
              $wpdb->update( $wpdb->users, array( 'location' => $location,
                                                  'about_you' => $about_you,
                                                  'dateofbirth' => date('Y-m-d',  strtotime($dateofbirth)) ,
@@ -1325,6 +1392,26 @@ if(typeof wpOnload=='function')wpOnload()
              return $user_id;
         }
         
+        
+        /**
+         * update prefernce
+         */
+        function prefernce_update($post)
+        {
+         
+           
+            $user_email = $post['email'];
+            $user_id = $post['checkuser_id'];
+            
+            
+             if( isset( $_POST['pass1'] ) && !empty( $_POST['pass1'] )){
+                $password =  $_POST['pass1'];
+                wp_update_user( array ('ID' => $user_id, 'user_pass' => $password) ) ;
+             }
+             wp_update_user( array ('ID' => $user_id, 'user_email' => $user_email) ) ;
+             
+              
+        }
         
 }
 

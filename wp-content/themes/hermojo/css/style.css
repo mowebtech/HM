@@ -46,22 +46,22 @@ input {border:none}
 
 /* HEADER
 =============================================================== */
-.header {background:#FFFFFF; padding-top:0px; position:relative;}
-.hedr-top {position:fixed; width:1003px; z-index:100; padding:0; margin:-4px 0 0 0; background:#FFFFFF; overflow:hidden}
-.logo-sp {float:left; margin:8px 0 0 18px}
+.header {background:#FFF; padding-top:0px; position:relative; padding:0; margin:0;}
+.hedr-top {position:fixed; width:1003px; z-index:100; padding:0; margin:0; background:#FFF; top:-5px; /*overflow:hidden*/}
+.logo-sp {float:left; margin:13px 0 0 18px}
 ul.user-login {float:right; overflow:hidden; margin:25px 21px 0 0} 
 ul.user-login li {float:left; margin-right:20px}
 ul.user-login li a {float:left; font-family:"Avgardm", Helvetica, sans-serif; font-size:15px; line-height:20px; color:#000000; text-transform:uppercase; background:url(../images/arrow-1.jpg) 100% 40% no-repeat; padding-right:18px; margin-right:5px} 
 
-
+.no-banner{padding-top:93px!important;}
 /* NAVIGATION
 ============================================================== */
-.nav-sp {background:url(../images/sprite-1.jpg) 0 0 repeat-x; height:37px; padding-left:16px; margin-top:10px}
+/*.nav-sp {background:url(../images/sprite-1.jpg) 0 0 repeat-x; height:37px; padding-left:16px; margin-top:10px}
 .nav-sp ul {padding-top:3px}
 .nav-sp ul li {float:left; height:30px; padding-left:4px; padding-right:4px; margin-right:30px}
 .nav-sp ul li:hover {border-bottom:solid 3px #F91864}
 .nav-sp ul li.active {border-bottom:solid 3px #F91864}
-.nav-sp ul li a {font-family:Tahoma, Helvetica, sans-serif; font-size:12px; line-height:15px; font-weight:bold; color:#fff;}
+.nav-sp ul li a {font-family:Tahoma, Helvetica, sans-serif; font-size:12px; line-height:15px; font-weight:bold; color:#fff;}*/
 
 /* CAROUSEL
 =================================================================== */
@@ -104,9 +104,9 @@ ul.user-login li a {float:left; font-family:"Avgardm", Helvetica, sans-serif; fo
 
 
 
-.inr-head-sp, .entry-header {background:url(../images/sprite-1.jpg) 0 -39px repeat-x; height:32px; padding:8px 0 8px 14px; margin-bottom:1px}
+.inr-head-sp, .entry-header {background:url(../images/sprite-1.jpg) 0 -39px repeat-x; height:31px; padding:8px 0 8px 14px; margin-bottom:1px}
 .inr-cont-details {width:677px; margin:0 auto; padding:0}
-.inr-cont-details p {font-family:Tahoma, Arial; font-size:12px; line-height:18px; color:#767676; padding-top:20px}
+.edit-link,.inr-cont-details p,.form-table-edit a {font-family:Tahoma, Arial; font-size:13px; line-height:18px; color:#767676; padding-top:20px}
 
 
 .cont-rgt {float:right; width:300px}
@@ -190,7 +190,7 @@ a.tt:hover span.bottom{
 }*/
 
 .view-more, .view-more-feeds, .view-more-twitter {background:#9F1B6C; overflow:hidden; padding:3px 0 3px 7px !important}
-.view-more a, .view-more-feeds a, .view-more-twitter a {float:right; font-size:11px; color:#FFFFFF; margin-right:10px}
+.view-more a, .view-more-feeds a, .view-more-twitter a {float:right; font-size: 13px; color:#FFFFFF; margin-right:10px}
 .view-more a:hover, .view-more-feeds a:hover, .view-more-twitter a:hover {text-decoration:underline}
 
 .view-more-feeds {background:#66AE2F}
@@ -248,9 +248,9 @@ a.tt:hover span.bottom{
 .locate-point {width:219px; margin:18px auto; background:#CC6600}
 
 /* .... form css ....*/
-#em-wrapper,#event-form,.submitbox,.profile,.pmpro_form,.login, .box{border:2px solid #EDECEC; padding:20px; width:500px; margin:0 auto;}
-p a, .pmpro_checkout tr td small a,#em-wrapper a,.submitbox a,.profile a,.pmpro_box h3 a,.pmpro_box ul li a,.pmpro_form a,.pmpro_box p small a,.login a, .box a{color:#666666;text-decoration: none;}
-p a:hover,.pmpro_checkout tr td small a:hover,.pmpro_box h3 a:hover,#em-wrapper a:hover,.submitbox a:hover,.pmpro_box ul li a:hover,.profile a:hover,.pmpro_box p small a:hover,.pmpro_form a:hover,.login a:hover, .box a:hover{color:#D72562;}
+#em-wrapper,#event-form,.submitbox,.profile,.pmpro_form,.login, .box{border:2px solid #EDECEC; padding:20px; width:auto; margin:0 auto;}
+.edit-link a,p a, .pmpro_checkout tr td small a,#em-wrapper a,.submitbox a,.profile a,.pmpro_box h3 a,.pmpro_box ul li a,.pmpro_form a,.pmpro_box p small a,.login a, .box a{color:#666666;text-decoration: none;}
+.edit-link a:hover,p a:hover,.pmpro_checkout tr td small a:hover,.pmpro_box h3 a:hover,#em-wrapper a:hover,.submitbox a:hover,.pmpro_box ul li a:hover,.profile a:hover,.pmpro_box p small a:hover,.pmpro_form a:hover,.login a:hover, .box a:hover{color:#D72562;}
 .tml-action-links li a:hover{
     color: #FFF
 }
@@ -260,7 +260,7 @@ p a:hover,.pmpro_checkout tr td small a:hover,.pmpro_box h3 a:hover,#em-wrapper 
 #em-wrapper input,#event-form input, .form-table input, .comments-area input,#searchform input, .input, .look{background:#EDEDED; border:1px solid #D9D6D6; padding:3px 5px; color:#000;}
 
 /*.... input buttons .....*/
-#pmpro_levels_table small a,#event-form p.submit input[type="submit"],.tml-action-links li a, .form-submit input[type="submit"],#searchform input[type="submit"],#em-wrapper input[type="submit"], .submit input[type="submit"] , .button_look{background:#D72562; padding:5px 10px; color:#FFF; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; -o-border-radius: 5px; -moz-box-shadow: -1px 1px 8px #C9C9C9; -webkit-box-shadow:-1px 1px 8px #C9C9C9; box-shadow:-1px 1px 8px #C9C9C9;}
+.form-table-edit a,#pmpro_levels_table small a,#event-form p.submit input[type="submit"],.tml-action-links li a, .form-submit input[type="submit"],#searchform input[type="submit"],#em-wrapper input[type="submit"], .submit input[type="submit"] , .button_look{background:#D72562; padding:5px 10px; color:#FFF; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; -o-border-radius: 5px; -moz-box-shadow: -1px 1px 8px #C9C9C9; -webkit-box-shadow:-1px 1px 8px #C9C9C9; box-shadow:-1px 1px 8px #C9C9C9;}
 
 .tml-action-links{ float:right; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; border:solid 0px red;width:230px;margin-top:-33px;margin-left:140px;}
 .tml-action-links li a{ float:left; margin:10px; }
@@ -278,7 +278,38 @@ p a:hover,.pmpro_checkout tr td small a:hover,.pmpro_box h3 a:hover,#em-wrapper 
 .form-table {font-family:Tahoma, Helvetica, sans-serif; font-size:12px; line-height:26px;}
 #theme-my-login h3 { margin-left: -20px; height:18px; font-family:"RockwellRegular", Helvetica, sans-serif; font-size:15px; line-height:18px; color:#fff; background:url(../images/sprite-1.jpg) 0 -126px repeat-x; width:auto;}
 
+/*-- user2 --*/
+#theme-submit-event h3, #theme-submit-event-date h3,#theme-submit-event-address h3, #theme-submit-event-desc h3, #theme-submit-event-contact h3
+ { 
+	margin-left: -20px; height:18px; font-family:"RockwellRegular", Helvetica, sans-serif; font-size:15px; line-height:18px; color:#fff; background:url(../images/sprite-1.jpg) 0 -126px repeat-x; width:auto;
+	}
+#theme-submit-event input{
+   line-height: 15px !important;
+    margin: 1px !important;
+    padding: 3px !important;
+    width: 80% !important;
+}
+#theme-submit-event tr, #theme-submit-event-date tr, #theme-submit-event-contact tr{
+	height: 30px;
+}
+#theme-submit-event select{
+		width: 84% !important;
+	}
+#theme-submit-event-date input[type=text]{
+	width: 203px !important;
+}
 
+#theme-submit-event-address select{
+	width: 210px !important;
+}
+#theme-submit-event-address input{
+//	width:214px !important;
+}
+#event-form{
+	padding: 0 0 0 20px !important;
+}
+
+/*-- user2 --*/
 
 
 /*... user 1 ...*/
@@ -293,17 +324,17 @@ p a:hover,.pmpro_checkout tr td small a:hover,.pmpro_box h3 a:hover,#em-wrapper 
     padding-left: 10px;
 }
 
-.profile input[type="submit"] {
+.profile input[type="submit"],.form-table-edit a{
     margin-left: 10px;
     margin-bottom: 10px;
 }
-#event-form table.em-location-data td, #event-form table.em-location-data th,#event-form h4 { font-size:11px; line-height:18px; font-weight: normal;}
+#event-form table.em-location-data td, #event-form table.em-location-data th,#event-form h4 { font-size: 13px; line-height:18px; font-weight: normal;}
 #event-form table.em-location-data td, #event-form table.em-location-data th{
     text-align: left;
     width: 116px;
     height: 35px}
 #event-form{
-    font-size: 11px;
+    font-size: 13px;
 }
 .em-date-input-loc{
     width: 118px;
@@ -311,18 +342,21 @@ p a:hover,.pmpro_checkout tr td small a:hover,.pmpro_box h3 a:hover,#em-wrapper 
 .em-location-data{
     width: auto !important;
 }
+.pmpro_form{
+    padding: 0px;
+}
 .pmpro_form h3 {
     background: url("../images/sprite-1.jpg") repeat-x scroll 0 -126px transparent;
     color: #FFFFFF;
     font-size: 15px;
     height: 18px;
     line-height: 18px;
-   margin-left: -21px;
-    width: 542px;
+  
+    width: auto;
 }
-form.pmpro_form label {float: left; margin: 3px 10px 0 0; width: 120px;text-align: left; font-size: 11px; font-weight: normal; }
+form.pmpro_form label {float: left; margin: 3px 10px 0 0; width: 120px;text-align: left; font-size: 13px; font-weight: normal; }
 form.pmpro_form .input, form.pmpro_form textarea, .input, form.pmpro_form select {padding: 3px; border: 1px solid #D9D6D6; margin: 0 3px 0 0; }
-.pmpro_thead-msg{ font-size: 11px;}
+.pmpro_thead-msg{ font-size: 13px;}
 .em-events-search-form span{
     display: block;
     
@@ -336,18 +370,18 @@ form.pmpro_form .input, form.pmpro_form textarea, .input, form.pmpro_form select
 }
 .em-events-search-form{
     margin-bottom: 36px;
-    font-size: 11px;
+    font-size: 13px;
 }
 .events-table{
    width:100%;
 }
-.singleeventpage a {font-size: 11px !important; color:#F80E5D !important; line-height:15px !important; }
+.singleeventpage a {font-size: 13px !important; color:#F80E5D !important; line-height:15px !important; }
 
 .ui-datepicker-div{
-    font-size: 11px !important;
+    font-size: 13px !important;
 }
-#user-avatar-display a,.pmpro_invoice th,.pmpro_invoice td,#pmpro_levels_table tr td strong,.events-table tr th,.events-table tr td,.em-locations-list li,.pmpro_box ul li a,.pmpro_box h3 a,.pmpro_box p small strong,.pmpro_box p small a{
-     font-size: 11px;
+.form-table-edit a,#user-avatar-display a,.pmpro_invoice th,.pmpro_invoice td,#pmpro_levels_table tr td strong,.events-table tr th,.events-table tr td,.em-locations-list li,.pmpro_box ul li a,.pmpro_box h3 a,.pmpro_box p small strong,.pmpro_box p small a{
+     font-size: 13px;
     line-height: 20px;
     margin-bottom: 9px;
     padding: 8px 10px;
@@ -361,6 +395,12 @@ form.pmpro_form .input, form.pmpro_form textarea, .input, form.pmpro_form select
     font-family: Tahoma,Arial;
     font-size: 15px;
     line-height: 18px;
+}
+form.pmpro_form .pmpro_submit span{
+    float: none;
+}
+form.pmpro_form .pmpro_submit{
+    margin-left: 234px;
 }
 .events-table tr td,.em-locations-list li,.pmpro_invoice th{
     border-bottom:   1px solid #DDDDDD;
@@ -378,7 +418,9 @@ form.pmpro_form .input, form.pmpro_form textarea, .input, form.pmpro_form select
     padding-left: 6px;
     width: auto;
 }
-p a.pmpro_yeslink,p a.pmpro_nolink,#pmpro_levels_table a,.payment_redirect a,.skip_url a{
+p a.pmpro_yeslink,p a.pmpro_nolink,#pmpro_levels_table a,.payment_redirect a,.skip_url a,
+.pmpro_btn-primary, .pmpro_btn-primary:link, #pmpro_levels_table tbody a, #pmpro_levels_table tbody a:link, .pmpro_btn-submit-checkout, .pmpro_yeslink, .pmpro_yeslink:link
+{
     background:#D72562 !important; 
     padding:5px 10px; 
     color:#FFF; 
@@ -391,7 +433,7 @@ p a.pmpro_yeslink,p a.pmpro_nolink,#pmpro_levels_table a,.payment_redirect a,.sk
     box-shadow:-1px 1px 8px #C9C9C9;
     text-shadow: none !important;
 }
-.skip_url a:hover,#pmpro_levels_table a:hover,.payment_redirect a:hover,.skip_url a:hover{
+.skip_url a:hover,#pmpro_levels_table a:hover,.payment_redirect a:hover,.skip_url a:hover,.form-table-edit a:hover{
     color:#FFF; 
 }
 #pmpro_levels_table,.pmpro_invoice{
@@ -399,7 +441,7 @@ p a.pmpro_yeslink,p a.pmpro_nolink,#pmpro_levels_table a,.payment_redirect a,.sk
     width: 100%
 }
 
-#pmpro_levels_table tr td strong,#pmpro_levels_table th,.pmpro_invoice th{
+#pmpro_levels_table tr td strong,#pmpro_levels_table th,.pmpro_invoice th,.pmpro_invoice{
     font-family: Tahoma,Arial;
 }
 .pmpro_checkout tr.active td{
@@ -416,13 +458,99 @@ h3{
 .pmpro_invoice th{
     text-align: left;
 }
-#pmpro_levels_table th,#pmpro_levels_table td
+#pmpro_levels_table th,#pmpro_levels_table td,.pmpro_invoice
 {
-    font-size: 11px;
+    font-size: 13px;
     line-height: 20px;
     margin-bottom: 9px;
     padding: 10px;
 }
 #pmpro_levels_table tr td strong{
     padding: 0px;
+}
+.form-table-edit{
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+/* DROP DOWN */
+
+#nav {
+	background:url(../images/sprite-1.jpg) 0 0 repeat-x; height:36px; padding-left:16px; margin-top:10px;
+}
+
+#nav ul ul {
+	display: none;
+}
+
+	#nav ul li:hover > ul {
+		display: block;
+	}
+
+
+#nav ul {
+	padding: 0 0px;
+	border-radius: 10px;  
+	list-style: none;
+	/*position: relative;*/
+	display: inline;
+}
+	#nav ul:after {
+		content: ""; /*clear: both; display: block;*/
+	}
+
+	#nav ul li {
+		float: left;
+		margin-right:25px;
+	}
+		#nav ul li:hover {
+			border-bottom:solid 3px #F91864
+		}
+			#nav ul li:hover a {
+				color: #fff;
+			}
+		
+		#nav ul li a {
+			display: block; padding:8px 7px 10px 7px;
+			color: #757575; text-decoration: none;
+			font-family:Tahoma, Helvetica, sans-serif; font-size:12px; line-height:15px; font-weight:bold; color:#fff;
+		}
+		#nav ul li a:hover {
+			font-family:Tahoma, Helvetica, sans-serif; font-size:12px; line-height:15px; font-weight:bold; color:#fff;
+			
+		}
+			
+		
+	#nav ul ul {
+		position: absolute; top: 100%;
+	}
+		#nav ul ul li {
+			float: none; 
+			background:url(../images/sprite-1.jpg) 0 0 repeat-x; height:36px; padding-left:16px;  position: relative;
+			border-bottom:solid 3px #181818;
+			height:30px;
+		}
+		#nav ul ul li:hover {
+			border-bottom:solid 3px #F91864
+		}
+			#nav ul ul li a {
+				width:150px;
+				padding:5px 0 0 5px;
+				color: #fff;
+			}	
+				#nav ul ul li a:hover {
+					border-bottom:none;
+				}
+		
+	#nav ul ul ul {
+		position: absolute; left: 100%; top:0;
+	}
+#event_table td p {
+	padding-top:0;
+}
+#event_table a {
+    color: #F80E5D;
+    font-size: 12px;
+    line-height: 15px;
+    text-decoration: underline;
 }

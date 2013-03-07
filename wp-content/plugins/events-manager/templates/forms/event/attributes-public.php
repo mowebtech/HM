@@ -10,8 +10,9 @@ $has_depreciated = false;
 ?>
 <?php if( count( $attributes['names'] ) > 0 ) : ?>
 	<?php foreach( $attributes['names'] as $name) : ?>
-	<div class="event-attributes">
-		<label for="em_attributes[<?php echo $name ?>]"><?php echo $name ?></label>
+
+	<td><label for="em_attributes[<?php echo $name ?>]"><?php echo $name ?></label></td>
+	<td>
 		<?php if( count($attributes['values'][$name]) > 1 ): ?>
 		<select name="em_attributes[<?php echo $name ?>]">
 			<?php foreach($attributes['values'][$name] as $attribute_val): ?>
@@ -26,6 +27,8 @@ $has_depreciated = false;
 		<?php $default_value = (!empty($attributes['values'][$name][0])) ? $attributes['values'][$name][0]:''; ?>
 		<input type="text" name="em_attributes[<?php echo $name ?>]" value="<?php echo array_key_exists($name, $EM_Event->event_attributes) ? htmlspecialchars($EM_Event->event_attributes[$name], ENT_QUOTES):''; ?>" value="<?php echo $default_value; ?>" />
 		<?php endif; ?>
-	</div>
-	<?php endforeach; ?>
+	</td>
+
+<?php endforeach; ?>
 <?php endif; ?>
+

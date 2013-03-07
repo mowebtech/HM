@@ -149,7 +149,13 @@ class Theme_My_Login_Template {
 					break;
                                 case 'image':
 					$title = __( 'Image', 'theme-my-login' );
+					break;
+                                case 'view':
+					$title = __( 'View Profile', 'theme-my-login' );
 					break;    
+                                case 'preference':
+					$title = __( 'Preference', 'theme-my-login' );
+					break;        
 				case 'lostpassword':
 				case 'retrievepassword':
 				case 'resetpass':
@@ -541,6 +547,8 @@ class Theme_My_Login_Template {
 			'login_template' => '',
 			'register_template' => '',
                         'image_template' =>'',
+                        'view_template' =>'',
+                        'preference_template'=>'',
 			'lostpassword_template' => '',
 			'resetpass_template' => '',
 			'user_template' => '',

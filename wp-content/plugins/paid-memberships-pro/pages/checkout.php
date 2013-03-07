@@ -305,7 +305,7 @@
 	
 	<?php if(empty($pmpro_stripe_lite) || $gateway != "stripe") { ?>
         
-			<h3>Billing Address</h3>
+			<h3 <?php if(!$pmpro_requirebilling || $gateway == "paypalexpress" || $gateway == "paypalstandard") { ?>style="display: none;"<?php } ?>>Billing Address</h3>
 		  
 	<table id="pmpro_billing_address_fields" class="pmpro_checkout top1em" width="100%" cellpadding="0" cellspacing="0" border="0" <?php if(!$pmpro_requirebilling || $gateway == "paypalexpress" || $gateway == "paypalstandard") { ?>style="display: none;"<?php } ?>>
 	
@@ -496,12 +496,12 @@
 	?>
 	<h3>Payment Information</h3>
 	<table id="pmpro_payment_information_fields" class="pmpro_checkout top1em" width="100%" cellpadding="0" cellspacing="0" border="0" <?php if(!$pmpro_requirebilling || $gateway == "paypalexpress" || $gateway == "paypalstandard") { ?>style="display: none;"<?php } ?>>
-	<thead>
+	<!--<thead>
 		<tr>
                         <span class="pmpro_thead-msg">We Accept <?php echo $pmpro_accepted_credit_cards_string?></span>
 			
 		</tr>
-	</thead>
+	</thead>-->
 	<tbody>                    
 		<tr valign="top">		
 			<td>	

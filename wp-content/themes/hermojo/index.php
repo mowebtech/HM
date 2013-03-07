@@ -1,4 +1,4 @@
-<?php
+	<?php
 /**
  * The main template file.
  *
@@ -25,23 +25,27 @@ get_header(); ?>
           </div>
           <div class="map-details-sp-outer"> 
 		  	<div class="map-img">
-				<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/pic-map.jpg" alt="" />
+				<?php echo do_shortcode('[locations_map]') ?> 
+			<!--	<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/pic-map.jpg" alt="" />  -->
 			</div>
 			<div class="map-description">
 				<span class="map-title">Title goes here...</span>
 				<p>Plusieurs variations de Lorem Ipsum peuvent &ecirc;tre trouv&eacute;es ici ou l&agrave;, mais la majeure partie plusieurs variations de Lorem Ipsum peuvent &ecirc;tre trouv&eacute;es ici ou l&agrave;, mais la majeure partie.....</p>
 				
 				<!--LOCATION POINT-->
-				<form action="#" method="post" id="post" name="maplocation">
+				<form id="event_map_form" name="event_map_form" method="post">
 				<div class="locate-point-sp">
 					<ul>
-						<li><span class="icon-location1"></span><input type="checkbox" name="Try" value="Try" class="locate-point1" />Try<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
-						<li><span class="icon-location2"></span><input type="checkbox" name="Try" value="Try" class="locate-point1" />Participate<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
-						<li><span class="icon-location3"></span><input type="checkbox" name="Try" value="Try" class="locate-point1" />Spectate<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
-						<li><span class="icon-location4"></span><input type="checkbox" name="Try" value="Try" class="locate-point1" />Meet<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
+						<li><span class="icon-location1"></span><input type='checkbox' class='locate-point1 event_types' name='event_types' value='try' />Try<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
+						<li><span class="icon-location2"></span><input type='checkbox' class='locate-point1 event_types' name='event_types' value='meet' />Meet<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
+						<li><span class="icon-location3"></span><input type='checkbox' class='locate-point1 event_types' name='event_types' value='spectate' />Spectate<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
+						<li><span class="icon-location4"></span><input type='checkbox' class='locate-point1 event_types' name='event_types' value='participate' />Participate<a href="#" title="" class="tt"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/link-tooltip.png" alt="" /></a></li>
 					</ul>
 					<input type="Submit" name="Submit" id="Submit" value="View List of Events" class="events" />
 				</div>
+
+				
+
 				</form>
 				<!--/LOCATION POINT-->
 			</div>

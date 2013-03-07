@@ -5,7 +5,7 @@
  *
  */
 class EM_Event_Post {
-	function init(){
+	function init(){ 
 		global $wp_query;
 		//Front Side Modifiers
 		if( !is_admin() ){
@@ -25,7 +25,7 @@ class EM_Event_Post {
 		add_action('publish_future_post',array('EM_Event_Post','publish_future_post'),10,1);
 	}
 	
-	function publish_future_post($post_id){
+	function publish_future_post($post_id){ 
 		global $wpdb, $EM_Event, $EM_Location, $EM_Notices;
 		$post_type = get_post_type($post_id);
 		$is_post_type = $post_type == EM_POST_TYPE_EVENT || $post_type == 'event-recurring';
@@ -61,20 +61,21 @@ class EM_Event_Post {
 		return $content;
 	}
 	
-	function the_content( $content ){
+	function the_content( $content ){ 
 		global $post, $EM_Event;
 		if( $post->post_type == EM_POST_TYPE_EVENT ){
 			if( is_archive() || is_search() ){
 				if(get_option('dbem_cp_events_archive_formats')){
 					$EM_Event = em_get_event($post);
 					$content = $EM_Event->output(get_option('dbem_event_list_item_format'));
+			
 				}
 			}else{
 				if( get_option('dbem_cp_events_formats') && !post_password_required() ){
 					$EM_Event = em_get_event($post);
 					ob_start();
 					em_locate_template('templates/event-single.php',true);
-					$content = ob_get_clean();
+					$content = ob_get_clean(); 
 				}else{
 					$EM_Event = em_get_event($post);
 					if( $EM_Event->event_rsvp ){
@@ -86,7 +87,7 @@ class EM_Event_Post {
 		return $content;
 	}
 	
-	function the_date( $the_date, $d = '' ){
+	function the_date( $the_date, $d = '' ){ 
 		global $post;
 		if( $post->post_type == EM_POST_TYPE_EVENT ){
 			$EM_Event = em_get_event($post);
@@ -96,10 +97,11 @@ class EM_Event_Post {
 				$the_date = date($d, $EM_Event->start);
 			}
 		}
+
 		return $the_date;
 	}
 	
-	function the_category( $thelist, $separator = '', $parents='' ){
+	function the_category( $thelist, $separator = '', $parents='' ){ 
 		global $post, $wp_rewrite;
 		if( $post->post_type == EM_POST_TYPE_EVENT ){
 			$EM_Event = em_get_event($post);

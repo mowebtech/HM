@@ -29,10 +29,11 @@ add_shortcode('events_gcal', 'em_get_gcal_shortcode');
  * @return string
  */
 function em_get_locations_map_shortcode($args){
-	$args['width'] = ( !empty($args['width']) ) ? $args['width']:450;
-	$args['height'] = ( !empty($args['height']) ) ? $args['height']:300;
+	$args['width'] = ( !empty($args['width']) ) ? $args['width']:434;
+	$args['height'] = ( !empty($args['height']) ) ? $args['height']:393;
 	ob_start();
 	em_locate_template('templates/map-global.php',true, array('args'=>$args)); 
+
 	return ob_get_clean();
 }
 add_shortcode('locations_map', 'em_get_locations_map_shortcode');
@@ -52,6 +53,30 @@ function em_get_events_list_shortcode($atts, $format='') {
 	return EM_Events::output( $atts );
 }
 add_shortcode ( 'events_list', 'em_get_events_list_shortcode' );
+
+/**
+ * Location map test shortcode : start by user2
+*/
+function em_get_events_on_map_shortcode($atts, $format='') {
+	$args = (array) $atts;
+
+	$args['width'] = ( !empty($args['width']) ) ? $args['width']:550;
+	$args['height'] = ( !empty($args['height']) ) ? $args['height']:400;
+	$args['format'] = ($format != '' || empty($args['format'])) ? $format : $args['format']; 
+	//$args['format'] = html_entity_decode($args['format']); //shorcode doesn't accept html
+	$args['page'] = ( !empty($args['page']) && is_numeric($args['page']) )? $args['page'] : 1;
+	$args['page'] = ( !empty($_GET['pno']) && is_numeric($_GET['pno']) )? $_GET['pno'] : $args['page'];
+	ob_start();
+	em_locate_template('templates/event-global.php',true, array('args'=>$args)); 
+
+	return ob_get_clean();
+
+}
+add_shortcode ( 'events_on_map', 'em_get_events_on_map_shortcode' );
+
+/* Location map test shortcode : end by user2*/
+
+
 
 /**
  * Shows a list of events according to given specifications. Accepts any event query attribute.

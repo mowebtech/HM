@@ -1,5 +1,5 @@
 var load_ui_css = false; //load jquery ui css?
-jQuery(document).ready( function($){
+jQuery(document).ready( function($){ 
 	/* Time Entry */
 	$('#start-time').each(function(i, el){
 		$(el).addClass('em-time-input em-time-start').next('#end-time').addClass('em-time-input em-time-end').parent().addClass('em-time-range');
@@ -18,7 +18,7 @@ jQuery(document).ready( function($){
 	} );
 
 	//Events Search
-	$('.em-events-search-form select[name=country]').change( function(){
+	$('.em-events-search-form select[name=country]').change( function(){ 
 		$('.em-events-search select[name=state]').html('<option value="">'+EM.txt_loading+'</option>');
 		$('.em-events-search select[name=region]').html('<option value="">'+EM.txt_loading+'</option>');
 		$('.em-events-search select[name=town]').html('<option value="">'+EM.txt_loading+'</option>');
@@ -732,7 +732,7 @@ function em_maps() {
 		var el = jQuery(this);
 		var map_id = el.attr('id').replace('em-locations-map-','');
 		var em_data = jQuery.parseJSON( jQuery('#em-locations-map-coords-'+map_id).text() );
-		jQuery.getJSON(document.URL, em_data , function(data){
+		jQuery.getJSON(document.URL, em_data , function(data){ 
 			if(data.length > 0){
 				  var myOptions = {
 				    mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -776,11 +776,29 @@ function em_maps() {
 
 
 
-//##############################################
+//########################################################
 
-		jQuery('#button_call').click(function(e){ alert('e load...');     
-jQuery.getJSON(document.URL+'&scope=today', em_data , function(data){
-			if(data.length > 0){
+jQuery('#select-all').click(function(e){   
+    if(this.checked) {
+        // Iterate each checkbox
+        jQuery('input:checkbox[name=sport_category]').each(function() {
+            this.checked = true;                        
+        });
+    }else{
+	jQuery('input:checkbox[name=sport_category]').each(function() {
+            this.checked = false;                        
+        });
+    }
+});
+//end 
+
+
+// ajax for filter using various attributes :: start by user2
+
+function event_map_ajax(filter_att){ 
+	
+	jQuery.getJSON(document.URL+"?"+filter_att, em_data , function(data){ 	
+			if(data.length > 0){				
 				  var myOptions = {
 				    mapTypeId: google.maps.MapTypeId.ROADMAP
 				  };
@@ -797,8 +815,9 @@ jQuery.getJSON(document.URL+'&scope=today', em_data , function(data){
 						var marker = new google.maps.Marker({
 						    position: location, 
 						    map: maps[map_id]
-						});
+						}); 
 						marker.setTitle(data[i].location_name);
+						
 						var myContent = '<div class="em-map-balloon"><div id="em-map-balloon-'+map_id+'" class="em-map-balloon-content">'+ data[i].location_balloon +'</div></div>';
 						em_map_infobox(marker, myContent, maps[map_id]);
 						
@@ -820,7 +839,138 @@ jQuery.getJSON(document.URL+'&scope=today', em_data , function(data){
 				el.children().first().html('No locations found');
 			}
 		});
-});//##################################################
+	
+}
+
+// ajax for filter using various attributes :: end by user2
+
+
+// get form data using form serialize :: start by user2
+function event_map_serialize(){ 
+
+		var eventType = [], eventCategory = [], eventDate = [],
+    		data = jQuery('form').find('input:not([name="event_types"],[name="sport_category"],[name="event_date"])').serialize();	
+		jQuery(".event_types:checked").each(function() {
+			eventType.push(this.value);
+		});
+		
+		jQuery(".sport_category:checked").each(function() {
+			eventCategory.push(this.value);
+		});
+
+		jQuery(".event_date:checked").each(function() {
+			eventDate.push(this.value);
+		});
+	
+		data = data += '&event_types='+eventType.join(',');
+		console.log(data);
+
+		data = data += '&category='+eventCategory.join(',');
+		console.log(data);
+		
+		data = data += '&scope='+eventDate.join(',');
+		console.log(data);
+
+		return data;
+
+}
+// get form data using form serialize :: end by user2
+
+
+
+jQuery('.event_types').click(function(e){      
+	var filter_att = event_map_serialize();
+	event_map_ajax(filter_att);
+});
+jQuery('.current_location').click(function(e){      
+	var country_code = jQuery('input:radio[name=current_location]:checked').val();
+
+	if(country_code == '')
+	{
+		jQuery("#postcode").css("display", "block");
+	}else{
+		jQuery("#postcode").css("display", "none");
+		
+		var filter_att = event_map_serialize(); 
+		event_map_ajax(filter_att);
+	}
+});
+
+jQuery("#postcode").focusout(function() {
+	var filter_att = event_map_serialize(); 
+	event_map_ajax(filter_att);
+});
+
+jQuery(".sport_category").click(function(e){    
+	var filter_att = event_map_serialize(); 
+	event_map_ajax(filter_att);
+});
+
+jQuery('.event_date').click(function(e){   
+	var filter_att = event_map_serialize();
+	event_map_ajax(filter_att);
+	
+});
+
+
+
+
+jQuery('#filter_sport_btn').click(function(e){     
+var matches = [];
+jQuery(".sport_category:checked").each(function() {
+    matches.push(this.value);
+});
+
+
+
+var category = '&category='+matches;
+
+
+jQuery.getJSON('http://192.168.1.50/projects/wordpress/sample-page/?'+category, em_data , function(data){ 	
+			if(data.length > 0){				
+				  var myOptions = {
+				    mapTypeId: google.maps.MapTypeId.ROADMAP
+				  };
+				  maps[map_id] = new google.maps.Map(document.getElementById("em-locations-map-"+map_id), myOptions);
+				  
+				  var minLatLngArr = [0,0];
+				  var maxLatLngArr = [0,0];
+				  
+				  for (var i = 0; i < data.length; i++) {
+					  if( !(data[i].location_latitude == 0 && data[i].location_longitude == 0) ){
+						var latitude = parseFloat( data[i].location_latitude );
+						var longitude = parseFloat( data[i].location_longitude );
+						var location = new google.maps.LatLng( latitude, longitude );
+						var marker = new google.maps.Marker({
+						    position: location, 
+						    map: maps[map_id]
+						}); 
+						marker.setTitle(data[i].location_name);
+						
+						var myContent = '<div class="em-map-balloon"><div id="em-map-balloon-'+map_id+'" class="em-map-balloon-content">'+ data[i].location_balloon +'</div></div>';
+						em_map_infobox(marker, myContent, maps[map_id]);
+						
+						//Get min and max long/lats
+						minLatLngArr[0] = (latitude < minLatLngArr[0] || i == 0) ? latitude : minLatLngArr[0];
+						minLatLngArr[1] = (longitude < minLatLngArr[1] || i == 0) ? longitude : minLatLngArr[1];
+						maxLatLngArr[0] = (latitude > maxLatLngArr[0] || i == 0) ? latitude : maxLatLngArr[0];
+						maxLatLngArr[1] = (longitude > maxLatLngArr[1] || i == 0) ? longitude : maxLatLngArr[1];
+					  }
+				  }
+				  // Zoom in to the bounds
+				  var minLatLng = new google.maps.LatLng(minLatLngArr[0],minLatLngArr[1]);
+				  var maxLatLng = new google.maps.LatLng(maxLatLngArr[0],maxLatLngArr[1]);
+				  var bounds = new google.maps.LatLngBounds(minLatLng,maxLatLng);
+				  maps[map_id].fitBounds(bounds);
+				//Call a hook if exists
+				jQuery(document).triggerHandler('em_maps_locations_hook', [maps[map_id]]);
+			}else{
+				el.children().first().html('No locations found');
+			}
+		});
+
+});
+
 
 
 
@@ -953,6 +1103,12 @@ function em_map_infobox(marker, message, map) {
     infowindow.open(map,marker);
   });
 }
+
+//start 
+// Listen for click on toggle checkbox
+
+
+
 
 /* jQuery timePicker - http://labs.perifer.se/timedatepicker/ @ http://github.com/perifer/timePicker commit 100644 */
  (function(a){function g(a){a.setFullYear(2001),a.setMonth(0),a.setDate(0);return a}function f(a,b){if(a){var c=a.split(b.separator),d=parseFloat(c[0]),e=parseFloat(c[1]);b.show24Hours||(d===12&&a.indexOf("AM")!==-1?d=0:d!==12&&a.indexOf("PM")!==-1&&(d+=12));var f=new Date(0,0,0,d,e,0);return g(f)}return null}function e(a,b){return typeof a=="object"?g(a):f(a,b)}function d(a){return(a<10?"0":"")+a}function c(a,b){var c=a.getHours(),e=b.show24Hours?c:(c+11)%12+1,f=a.getMinutes();return d(e)+b.separator+d(f)+(b.show24Hours?"":c<12?" AM":" PM")}function b(b,c,d,e){b.value=a(c).text(),a(b).change(),a.browser.msie||b.focus(),d.hide()}a.fn.timePicker=function(b){var c=a.extend({},a.fn.timePicker.defaults,b);return this.each(function(){a.timePicker(this,c)})},a.timePicker=function(b,c){var d=a(b)[0];return d.timePicker||(d.timePicker=new jQuery._timePicker(d,c))},a.timePicker.version="0.3",a._timePicker=function(d,h){var i=!1,j=!1,k=e(h.startTime,h),l=e(h.endTime,h),m="selected",n="li."+m;a(d).attr("autocomplete","OFF");var o=[],p=new Date(k);while(p<=l)o[o.length]=c(p,h),p=new Date(p.setMinutes(p.getMinutes()+h.step));var q=a('<div class="time-picker'+(h.show24Hours?"":" time-picker-12hours")+'"></div>'),r=a("<ul></ul>");for(var s=0;s<o.length;s++)r.append("<li>"+o[s]+"</li>");q.append(r),q.appendTo("body").hide(),q.mouseover(function(){i=!0}).mouseout(function(){i=!1}),a("li",r).mouseover(function(){j||(a(n,q).removeClass(m),a(this).addClass(m))}).mousedown(function(){i=!0}).click(function(){b(d,this,q,h),i=!1});var t=function(){if(q.is(":visible"))return!1;a("li",q).removeClass(m);var b=a(d).offset();q.css({top:b.top+d.offsetHeight,left:b.left}),q.show();var e=d.value?f(d.value,h):k,i=k.getHours()*60+k.getMinutes(),j=e.getHours()*60+e.getMinutes()-i,n=Math.round(j/h.step),o=g(new Date(0,0,0,0,n*h.step+i,0));o=k<o&&o<=l?o:k;var p=a("li:contains("+c(o,h)+")",q);p.length&&(p.addClass(m),q[0].scrollTop=p[0].offsetTop);return!0};a(d).focus(t).click(t),a(d).blur(function(){i||q.hide()});var u=a.browser.opera||a.browser.mozilla?"keypress":"keydown";a(d)[u](function(c){var e;j=!0;var f=q[0].scrollTop;switch(c.keyCode){case 38:if(t())return!1;e=a(n,r);var g=e.prev().addClass(m)[0];g?(e.removeClass(m),g.offsetTop<f&&(q[0].scrollTop=f-g.offsetHeight)):(e.removeClass(m),g=a("li:last",r).addClass(m)[0],q[0].scrollTop=g.offsetTop-g.offsetHeight);return!1;case 40:if(t())return!1;e=a(n,r);var i=e.next().addClass(m)[0];i?(e.removeClass(m),i.offsetTop+i.offsetHeight>f+q[0].offsetHeight&&(q[0].scrollTop=f+i.offsetHeight)):(e.removeClass(m),i=a("li:first",r).addClass(m)[0],q[0].scrollTop=0);return!1;case 13:if(q.is(":visible")){var k=a(n,r)[0];b(d,k,q,h)}return!1;case 27:q.hide();return!1}return!0}),a(d).keyup(function(a){j=!1}),this.getTime=function(){return f(d.value,h)},this.setTime=function(b){d.value=c(e(b,h),h),a(d).change()}},a.fn.timePicker.defaults={step:30,startTime:new Date(0,0,0,0,0,0),endTime:new Date(0,0,0,23,30,0),separator:":",show24Hours:!0}})(jQuery)

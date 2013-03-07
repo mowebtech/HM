@@ -4,7 +4,7 @@
  * Use this class to query and manipulate sets of events. If dealing with more than one event, you probably want to use this class in some way.
  *
  */
-class EM_Events extends EM_Object implements Iterator {
+class EM_Events extends EM_Object implements Iterator { 
 	/**
 	 * Array of EM_Event objects
 	 * @var array EM_Event
@@ -32,7 +32,7 @@ class EM_Events extends EM_Object implements Iterator {
 	 * @param array $args
 	 * @return EM_Event array()
 	 */
-	function get( $args = array(), $count=false ) {// print_r($args); exit;
+	function get( $args = array(), $count=false ) { // print_r($args); exit; 
 		global $wpdb;	 
 		$events_table = EM_EVENTS_TABLE;
 		$locations_table = EM_LOCATIONS_TABLE;
@@ -89,15 +89,15 @@ class EM_Events extends EM_Object implements Iterator {
 			$where
 			$orderby_sql
 			$limit $offset
-		";
+		"; 
 
 		//If we're only counting results, return the number of results
 		if( $count ){
 			return apply_filters('em_events_get_count', $wpdb->get_var($sql), $args);		
 		}
-                //print_r($args); exit;
+                
 		$results = $wpdb->get_results( apply_filters('em_events_get_sql',$sql, $args), ARRAY_A);
-               
+              
 		//If we want results directly in an array, why not have a shortcut here?
 		if( $args['array'] == true ){
                         return apply_filters('em_events_get_array',$results, $args);
@@ -116,7 +116,7 @@ class EM_Events extends EM_Object implements Iterator {
 				$events[] = em_get_event($event['post_id'], 'post_id');
 			}
 		}
-                //echo 'here';
+                
 		return apply_filters('em_events_get', $events, $args);
 	}
 	
@@ -166,7 +166,7 @@ class EM_Events extends EM_Object implements Iterator {
 	 * @param array $secondary_args
 	 * @return string
 	 */
-	function output( $args ){
+	function output( $args ){ 
         
 		global $EM_Event;
 		$EM_Event_old = $EM_Event; //When looping, we can replace EM_Event global with the current event in the loop
@@ -205,8 +205,8 @@ class EM_Events extends EM_Object implements Iterator {
 		$events = apply_filters('em_events_output_events', $events);
                 
 		if ( $events_count > 0 ) {
-			foreach ( $events as $EM_Event ) {
-				$output .= $EM_Event->output($format);
+			foreach ( $events as $EM_Event ) { //echo '<pre>'; print_r($EM_Event); 
+				$output .= $EM_Event->output($format,'json');
 			}
 			//Add headers and footers to output
 			if( $format == get_option ( 'dbem_event_list_item_format' ) ){
@@ -217,6 +217,7 @@ class EM_Events extends EM_Object implements Iterator {
 				$format_footer = ( !empty($args['format_footer']) ) ? $args['format_footer']:'';
 			}
 			$output = $format_header .  $output . $format_footer;
+		
 			//Pagination (if needed/requested)
 			if( !empty($args['pagination']) && !empty($limit) && $events_count > $limit ){
 				//Show the pagination links (unless there's less than $limit events)
@@ -234,6 +235,137 @@ class EM_Events extends EM_Object implements Iterator {
                 
 		return $output;		
 	}
+
+//########################################################################################################################################
+function outputjson( $args ){ 
+        	
+		global $EM_Event,$EM_Object,$EM_Category;
+		$EM_Event_old = $EM_Event; //When looping, we can replace EM_Event global with the current event in the loop
+		//Can be either an array for the get search or an array of EM_Event objects
+		$func_args = func_get_args();
+		$page = 1; //default
+		if( !array_key_exists('page',$args) && !empty($_REQUEST['pno']) && is_numeric($_REQUEST['pno']) ){
+			$page = $args['page'] = $_REQUEST['pno'];
+		}
+		if( is_object(current($args)) && get_class((current($args))) == 'EM_Event' ){ 
+
+			$func_args = func_get_args();
+			$events = $func_args[0];
+			$args = (!empty($func_args[1]) && is_array($func_args[1])) ? $func_args[1] : array();
+			$args = apply_filters('em_events_output_args', self::get_default_search($args), $events);
+			$limit = ( !empty($args['limit']) && is_numeric($args['limit']) ) ? $args['limit']:false;
+			$offset = ( !empty($args['offset']) && is_numeric($args['offset']) ) ? $args['offset']:0;
+			$page = ( !empty($args['page']) && is_numeric($args['page']) ) ? $args['page']:$page;
+			$events_count = count($events);
+		}else{ 
+
+			//Firstly, let's check for a limit/offset here, because if there is we need to remove it and manually do this
+			$args = apply_filters('em_events_output_args', self::get_default_search($args) );
+			$limit = ( !empty($args['limit']) && is_numeric($args['limit']) ) ? $args['limit']:false;
+			$offset = ( !empty($args['offset']) && is_numeric($args['offset']) ) ? $args['offset']:0;
+			$page = ( !empty($args['page']) && is_numeric($args['page']) ) ? $args['page']:$page;
+			$args_count = $args;
+			$args_count['limit'] = false;
+			$args_count['offset'] = false;
+			$args_count['page'] = false;
+			$events_count = self::count($args_count);
+			$events = self::get( $args );
+                        
+		}
+		//What format shall we output this to, or use default
+		$format = ( empty($args['format']) ) ? get_option( 'dbem_event_list_item_format' ) : $args['format'] ;
+		$output = "";
+		$events = apply_filters('em_events_output_events', $events);
+                
+		if ( $events_count > 0 ) {
+			foreach ( $events as $location_key=>$EM_Event ) { 
+				$EM_Location = $EM_Event->get_location();
+
+				$json_locations[$location_key] = $EM_Location->to_array();
+
+				//Old ballon
+			/*	$json_locations[$location_key]['location_balloon'] = $EM_Location->output(get_option('dbem_map_text_format')).'<p>'.$EM_Event->event_name.'</p>'; */
+				//New ballon 
+				if($EM_Event->event_name != ''){ $em_title = $EM_Event->event_name; }else{ $em_title = ''; }
+				if($EM_Event->post_content != ''){ $em_desc = $EM_Event->post_content."<br/>"; }else{ $em_desc = ''; }
+				if($EM_Event->website_link != ''){ 
+					$em_website = "<a href=".$EM_Event->website_link." ><img src='".plugins_url()."/events-manager/includes/images/web16x16.png' />"; 
+				}else{ 
+					$em_website = ''; 
+				}
+
+				if($EM_Event->twitter_link != ''){ 
+					$em_twitter = "<a href=".$EM_Event->twitter_link." ><img src='".plugins_url()."/events-manager/includes/images/twitter16x16.png' />"; 
+				}else{ 
+					$em_twitter = ''; 
+				}
+
+				if($EM_Event->facebook_link != ''){ 
+					$em_facebook = "<a href=".$EM_Event->facebook_link." ><img src='".plugins_url()."/events-manager/includes/images/facebook16x16.png' />"; 
+				}else{ 
+					$em_facebook = ''; 
+				}
+			
+				if($EM_Event->webtv_url != ''){ 
+					$em_webtv = "<a href=".$EM_Event->webtv_url." ><img src='".plugins_url()."/events-manager/includes/images/webtv16x16.png' />"; 
+				}else{ 
+					$em_webtv = ''; 
+				}
+
+	
+				if($EM_Event->output(get_option('dbem_map_text_format')) != ''){ $datetime = $EM_Event->output(get_option('dbem_map_text_format')); }else{ $datetime = ''; }
+			
+			/*
+				if($EM_Event->event_name != ''){ $em_title = $EM_Event->event_name."<br/>"; }else{ $em_title = ''; }
+				if($EM_Event->event_name != ''){ $em_title = $EM_Event->event_name."<br/>"; }else{ $em_title = ''; }
+				if($EM_Event->event_name != ''){ $em_title = $EM_Event->event_name."<br/>"; }else{ $em_title = ''; }
+			*/			
+				$json_locations[$location_key]['location_balloon'] = $em_title.$category.$datetime.$em_desc.$em_website.$em_twitter.$em_facebook.$em_webtv;
+
+
+
+			
+			}
+			return EM_Object::json_encode($json_locations);
+			exit;
+		} else {	
+				return '[]';
+				exit;
+			}
+
+
+/*
+			//Add headers and footers to output
+			if( $format == get_option ( 'dbem_event_list_item_format' ) ){
+				$format_header = ( get_option( 'dbem_event_list_item_format_header') == '' ) ? '':get_option ( 'dbem_event_list_item_format_header' );
+				$format_footer = ( get_option ( 'dbem_event_list_item_format_footer' ) == '' ) ? '':get_option ( 'dbem_event_list_item_format_footer' );
+			}else{
+				$format_header = ( !empty($args['format_header']) ) ? $args['format_header']:'';
+				$format_footer = ( !empty($args['format_footer']) ) ? $args['format_footer']:'';
+			}
+			$output = $format_header .  $output . $format_footer;
+		
+			//Pagination (if needed/requested)
+			if( !empty($args['pagination']) && !empty($limit) && $events_count > $limit ){
+				//Show the pagination links (unless there's less than $limit events)
+				$page_link_template = preg_replace('/(&|\?)pno=\d+/i','',$_SERVER['REQUEST_URI']);
+				$page_link_template = em_add_get_params($page_link_template, array('pno'=>'%PAGE%'), false); //don't html encode, so em_paginate does its thing;
+				$output .= apply_filters('em_events_output_pagination', em_paginate( $page_link_template, $events_count, $limit, $page), $page_link_template, $events_count, $limit, $page);
+			}
+		} else {
+			$output = get_option ( 'dbem_no_events_message' );
+		}	
+		
+		//TODO check if reference is ok when restoring object, due to changes in php5 v 4
+		$EM_Event = $EM_Event_old;
+		$output = apply_filters('em_events_output', $output, $events, $args);
+                
+		return $output;	
+
+*/	
+	}
+//########################################################################################################################################
+
 	
 	function can_manage($event_ids){ 
 		global $wpdb;
@@ -287,9 +419,27 @@ class EM_Events extends EM_Object implements Iterator {
 			$conditions['search'] = "(".implode(" LIKE '%{$args['search']}%' OR ", $like_search). "  LIKE '%{$args['search']}%')";
 		}
 /* start by user2 */
-		if( !empty($args['event_types']) ){
-			$conditions['event_types'] = "(`event_types`='{$args['event_types']}')";
+		if( !empty($args['event_types']) ){ 
+			$event_types = str_replace(",", "','", $args['event_types']);
+			$conditions['event_types'] = "(`event_types` IN ('{$event_types}'))"; 
 		}
+
+/*condition for location postcode :start by user2*/
+		if(!empty($args['postcode'])){ 
+			$conditions['locationpostcode'] .= "(";
+				$conditions['locationpostcode'] .= "location_postcode='{$args['postcode']}'";			
+			$conditions['locationpostcode'] .= ")";
+		}
+
+/*condition for location postcode :end by user2*/
+
+/*condition for country postcode :start by user2*/
+		if(!empty($args['country'])){ 
+			$conditions['event_country'] = "(`location_country`='{$args['country']}')";
+		}
+
+/*condition for location postcode :end by user2*/
+
 /* end by user2*/
 		if( array_key_exists('status',$args) && is_numeric($args['status']) ){
 			$null = ($args['status'] == 0) ? ' OR `event_status` = 0':'';
@@ -369,6 +519,8 @@ class EM_Events extends EM_Object implements Iterator {
 			'private_only' => false,
 			'post_id' => false,
 			'event_types'=>false, //by user2
+			'postcode'=>false, //by user2
+			'category'=>false, //by user2
 		);
 		if( EM_MS_GLOBAL && !is_admin() ){
 			if( empty($array['blog']) && is_main_site() && get_site_option('dbem_ms_global_events') ){

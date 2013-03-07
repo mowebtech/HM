@@ -106,7 +106,29 @@ class Theme_My_Login_Themed_Profiles extends Theme_My_Login_Module {
 					if ( is_multisite() )
 						break;
                                 case 'image' :
-                                        // Allow image upload 
+                                        // Redirect to login page if not logged in
+					if ( !is_user_logged_in() ) {
+						$redirect_to = $theme_my_login->get_login_page_link( array( 'reauth' => 1 ) );
+						wp_redirect( $redirect_to );
+						exit();
+					}
+                                    break;
+                                    
+                                case 'preference' :
+                                        // Redirect to login page if not logged in
+					if ( !is_user_logged_in() ) {
+						$redirect_to = $theme_my_login->get_login_page_link( array( 'reauth' => 1 ) );
+						wp_redirect( $redirect_to );
+						exit();
+					}
+                                    break;    
+                                case 'view' :
+                                       // Redirect to login page if not logged in
+					if ( !is_user_logged_in() ) {
+						$redirect_to = $theme_my_login->get_login_page_link( array( 'reauth' => 1 ) );
+						wp_redirect( $redirect_to );
+						exit();
+					}
                                     break;
 				default :
 					// Redirect to profile for any other action if logged in
@@ -243,6 +265,48 @@ class Theme_My_Login_Themed_Profiles extends Theme_My_Login_Module {
                  
                 
         }
+        
+        function get_view_form(&$template)
+        {
+            
+            global $current_user, $profileuser, $_wp_admin_css_colors, $wp_version;
+                
+                $current_user = wp_get_current_user();
+                
+		
+
+		$_template = array();
+		// Allow template override via shortcode or template tag args
+		if ( !empty( $template->options['view_template'] ) )
+			$_template[] = $template->options['view_template'];
+                //$_template[] = 'profile-form.php'; by user 1
+		$_template[] = 'profile-view.php';
+		// Load template
+		$template->get_template( $_template, '', true, compact( 'current_user', 'profileuser', '_wp_admin_css_colors', 'wp_version' ) );
+                 
+                
+        }
+        
+        function get_preference_form(&$template)
+        {
+            
+            global $current_user, $profileuser, $_wp_admin_css_colors, $wp_version;
+                
+                $current_user = wp_get_current_user();
+                
+		
+                
+		$_template = array();
+		// Allow template override via shortcode or template tag args
+		if ( !empty( $template->options['preference_template'] ) )
+			$_template[] = $template->options['preference_template'];
+                //$_template[] = 'profile-form.php'; by user 1
+		$_template[] = 'profile-preference.php';
+		// Load template
+		$template->get_template( $_template, '', true, compact( 'current_user', 'profileuser', '_wp_admin_css_colors', 'wp_version' ) );
+                 
+                
+        }
 
 	/**
 	 * Changes links from "profile.php" to themed profile page
@@ -370,6 +434,8 @@ class Theme_My_Login_Themed_Profiles extends Theme_My_Login_Module {
                 
                 //add_action( 'tml_request_image', array( &$this, 'image_action' ) );
                 add_action( 'tml_display_image', array( &$this, 'get_image_form' ) );
+                add_action( 'tml_display_view', array( &$this, 'get_view_form' ) );
+                add_action( 'tml_display_preference', array( &$this, 'get_preference_form' ) );
                 
 	}
 }

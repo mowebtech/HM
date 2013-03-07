@@ -25,6 +25,8 @@ if( !empty($_REQUEST['success']) ){
 ?>	
 <form enctype='multipart/form-data' id="event-form" method="post" action="<?php echo add_query_arg(array('success'=>null)); ?>">
 	<div class="wrap">
+
+	 <div id="theme-submit-event" >
 		<?php do_action('em_front_event_form_header'); ?>
 		<?php if(get_option('dbem_events_anonymous_submissions') && !is_user_logged_in()): ?>
 			<h4 class="event-form-submitter"><?php _e ( 'Your Details', 'dbem' ); ?></h4>
@@ -39,113 +41,115 @@ if( !empty($_REQUEST['success']) ){
 				</p>
 				<?php do_action('em_font_event_form_guest'); ?>
 			</div>
-		<?php endif; ?>
-                
-		<h4 class="event-form-name"><?php _e ( 'Event Name', 'dbem' ); ?></h4>
-		<div class="inside event-form-name">
-			<input type="text" name="event_name" id="event-name" value="<?php echo htmlspecialchars($EM_Event->event_name,ENT_QUOTES); ?>" /><?php echo $required; ?>
-			<br />
-			<?php _e ( 'The event name. Example: Birthday party', 'dbem' )?>
-			<?php em_locate_template('forms/event/group.php',true); ?>
-		</div>
-		<!-- start by user2 -->
-		<!--Company name on frontend -->
-		<h4 class="event-form-name"><?php _e ( 'Company:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="company_name" type="text" name="company_name" value="<?php echo $EM_Event->company_name; ?>" />
-		</div>
-
-		<div class="event-extra-details">
-			<?php if(get_option('dbem_categories_enabled')) { em_locate_template('forms/event/attributes-public.php',true); }  ?>
-			<?php if(get_option('dbem_categories_enabled')) { em_locate_template('forms/event/categories-public.php',true); }  ?>
-		</div>
-
-		<!-- Type field on frontend  -->
-		<h4 class="event-form-name"><?php _e ( 'Type:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<select id="event_types" name="event_types">
-				<option <?php if($EM_Event->event_types == "try") echo 'selected=selected'; ?> value="try">Try</option>
-				<option <?php if($EM_Event->event_types == "spectate") echo 'selected=selected'; ?> value="spectate">Spectate</option>
-				<option <?php if($EM_Event->event_types == "participate") echo 'selected=selected'; ?> value="participate">Participate</option>
-				<option <?php if($EM_Event->event_types == "meet") echo 'selected=selected'; ?> value="meet">Meet</option>
-                    </select>
-		</div>
-
-		<!--end by user2-->
 		
-					
-		<h4 class="event-form-when"><?php _e ( 'Date of Event	', 'dbem' ); ?></h4>
-		<div class="inside event-form-when">
+		<?php endif; ?>
+			<h3>Event Details</h3>
+		<table>
+			<tr>
+				<td><label><?php echo $required; ?><?php _e ( 'Event Name', 'dbem' ); ?></label></td>
+				<td width="258px"><input type="text" name="event_name" id="event-name" value="<?php echo htmlspecialchars($EM_Event->event_name,ENT_QUOTES); ?>" /></td>
+			</tr>
+			<tr>
+				<td><label><?php _e ( 'Company:', 'dbem' )?></label></td>
+				<td><input id="company_name" type="text" name="company_name" value="<?php echo $EM_Event->company_name; ?>" /></td>
+			</tr>
+			<tr>
+				<?php if(get_option('dbem_categories_enabled')) { em_locate_template('forms/event/attributes-public.php',true); }  ?>
+				<?php if(get_option('dbem_categories_enabled')) { em_locate_template('forms/event/categories-public.php',true); }  ?>
+			</tr>
+			<tr>
+				<td><label><?php _e ( 'Type:', 'dbem' )?></label></td>
+				<td>
+					<select id="event_types" name="event_types">
+						<option <?php if($EM_Event->event_types == "try") echo 'selected=selected'; ?> value="try">Try</option>
+						<option <?php if($EM_Event->event_types == "spectate") echo 'selected=selected'; ?> value="spectate">Spectate</option>
+						<option <?php if($EM_Event->event_types == "participate") echo 'selected=selected'; ?> value="participate">Participate</option>
+						<option <?php if($EM_Event->event_types == "meet") echo 'selected=selected'; ?> value="meet">Meet</option>
+                    </select>
+				</td>
+			</tr>						
+		</table>
+		
+		</div>
+		<div id="theme-submit-event-date">		
+		<h3>Date of Event</h3>			
 		<?php 
 			if( empty($EM_Event->event_id) && $EM_Event->can_manage('edit_recurring_events','edit_others_recurring_events') && get_option('dbem_recurrence_enabled') ){
-				em_locate_template('forms/event/when-with-recurring.php',true);
+					em_locate_template('forms/event/when-with-recurring.php',true);
 			}elseif( $EM_Event->is_recurring()  ){
-				em_locate_template('forms/event/recurring-when.php',true);
+					em_locate_template('forms/event/recurring-when.php',true);
 			}else{
-				em_locate_template('forms/event/when.php',true);
+					em_locate_template('forms/event/when.php',true);
 			}
-		?>
+		?>				
 		</div>
-
-		<?php if( get_option('dbem_locations_enabled') ): ?>
-		<h4 class="event-form-where"><?php _e ( 'Address', 'dbem' ); ?></h4>
-		<div class="inside event-form-where">
-		<?php em_locate_template('forms/event/location.php',true); ?>
-		</div>
-		<?php endif; ?>
-		
-		<h4 class="event-form-details"><?php _e ( 'Description', 'dbem' ); ?></h4>
-		<div class="inside event-form-details">
-			<div class="event-editor">
-				<?php if( get_option('dbem_events_form_editor') && function_exists('wp_editor') ): ?>
-					<?php wp_editor($EM_Event->post_content, 'em-editor-content', array('textarea_name'=>'content') ); ?> 
-				<?php else: ?>
-					<textarea name="content" rows="10" style="width:100%"><?php echo $EM_Event->post_content ?></textarea>
-					<br />
-					<?php _e ( 'Details about the event.', 'dbem' )?> <?php _e ( 'HTML allowed.', 'dbem' )?>
-				<?php endif; ?>
-			</div>			
+		<div id="theme-submit-event-address" >		
+			<?php if( get_option('dbem_locations_enabled') ): ?>
+			<h3><?php _e ( 'Address', 'dbem' ); ?></h3>
+			<div class="inside event-form-where">
+			<?php em_locate_template('forms/event/location.php',true); ?>
+			</div>
+			<?php endif; ?>			
 		</div>
 		
-		<!-- Contact Email field on frontend -->		
-		<h4 class="event-form-name"><?php _e ( 'Contact Email:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="contact_email" type="text" name="contact_email" value="<?php echo $EM_Event->contact_email; ?>" /><?php echo $required; ?>
-		</div>	
+		<div id="theme-submit-event-desc">
+			<h3><?php _e ( 'Description', 'dbem' ); ?></h3>
+			<div class="inside event-form-details">
+				<div class="event-editor">
+					<?php if( get_option('dbem_events_form_editor') && function_exists('wp_editor') ): ?>
+						<?php wp_editor($EM_Event->post_content, 'em-editor-content', array('textarea_name'=>'content') ); ?> 
+					<?php else: ?>
+						<textarea name="content" rows="10" style="width:95%"><?php echo $EM_Event->post_content ?></textarea>
+						<br />
+						<?php _e ( 'Details about the event.', 'dbem' )?>
+					<?php endif; ?>
+				</div>			
+			</div>
+		</div>
 		
-		<!-- Field for premium users-->
-		
-		<!--Contact Telephone on frontend -->
-		<h4 class="event-form-name"><?php _e ( 'Contact Telephone Number:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="contact_telephone" type="text" name="contact_telephone" value="<?php echo $EM_Event->contact_telephone; ?>" />
+		<div id="theme-submit-event-contact">
+			<h3>Contact Information</h3>
+			<table>
+				<tr>
+					<td><label><?php _e ( 'Contact Email:', 'dbem' )?></label></td>
+					<td>
+						<input id="contact_email" type="text" name="contact_email" value="<?php echo $EM_Event->contact_email; ?>" /><?php echo $required; ?>
+					</td>
+				</tr>
+				<tr>
+					<td><label><?php _e ( 'Contact Telephone Number:', 'dbem' )?></label></td>
+					<td>
+						<input id="contact_telephone" type="text" name="contact_telephone" value="<?php echo $EM_Event->contact_telephone; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><label><?php _e ( 'Website link:', 'dbem' )?></label></td>
+					<td>
+						<input id="website_link" type="text" name="website_link" value="<?php echo $EM_Event->website_link; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><label><?php _e ( 'Twitter link:', 'dbem' )?></label></td>
+					<td>
+						<input id="twitter_link" type="text" name="twitter_link" value="<?php echo $EM_Event->twitter_link; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><label><?php _e ( 'Facebook link:', 'dbem' )?></label></td>
+					<td>
+						<input id="facebook_link" type="text" name="facebook_link" value="<?php echo $EM_Event->facebook_link; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td><label><?php _e ( 'Web Tv url:', 'dbem' )?></label></td>
+					<td>
+						<input id="webtv_url" type="text" name="webtv_url" value="<?php echo $EM_Event->webtv_url; ?>" />
+					</td>
+				</tr>
+			</table>
 		</div>
+         
 
-		<!--Website link on frontend -->
-		<h4 class="event-form-name"><?php _e ( 'Website link:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="website_link" type="text" name="website_link" value="<?php echo $EM_Event->website_link; ?>" />
-		</div>
-
-		<!--Twitter link on frontend -->
-		<h4 class="event-form-name"><?php _e ( 'Twitter link:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="twitter_link" type="text" name="twitter_link" value="<?php echo $EM_Event->twitter_link; ?>" />
-		</div>
-
-		<!--Facebook link on frontend -->
-		<h4 class="event-form-name"><?php _e ( 'Facebook link:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="facebook_link" type="text" name="facebook_link" value="<?php echo $EM_Event->facebook_link; ?>" />
-		</div>
-
-		<!--Web Tv url on frontend -->
-		<h4 class="event-form-name"><?php _e ( 'Web Tv url:', 'dbem' )?></h4>
-		<div class="inside event-form-name">
-			<input id="webtv_url" type="text" name="webtv_url" value="<?php echo $EM_Event->webtv_url; ?>" />
-		</div>
-	
-	<!--End Field for premium users --> 	
 		
 <!-- start by user2 : to remove from frontend -->
 <!--		
@@ -169,7 +173,8 @@ if( !empty($_REQUEST['success']) ){
 		<?php endif; ?>
 		
 		<?php do_action('em_front_event_form_footer'); ?>
-	</div>
+	
+	
 	<p class="submit">
 		<input type="submit" name="events_update" value="<?php _e ( 'Submit Event', 'dbem' ); ?> &raquo;" />
 	</p>

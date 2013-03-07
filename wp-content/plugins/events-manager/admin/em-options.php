@@ -221,7 +221,7 @@ function em_admin_options_uninstall_page(){
 	}
 }
 
-function em_admin_options_page() {
+function em_admin_options_page() { 
 	global $wpdb, $EM_Notices;
 	//Check for uninstall/reset request
 	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'uninstall' ){

@@ -18,7 +18,6 @@
 If you would like to edit this file, copy it to your current theme's directory and edit it there.
 Theme My Login will always look in your theme's directory first, before using this default template.
 */
-
 $user_role = reset( $profileuser->roles );
 if ( is_multisite() && empty( $user_role ) ) {
 	$user_role = 'subscriber';
@@ -32,14 +31,24 @@ foreach ( array( 'posts', 'pages' ) as $post_cap )
 
 $profileuser = get_user_to_edit($current_user->ID);
 
+
+  
 ?>
 
 <div class="login profile" id="theme-my-login<?php $template->the_instance(); ?>">
-	<?php //$template->the_action_template_message( 'profile_update' ); ?>
+	<?php 
+            if($_GET['level']=='2' && wp_get_current_user()->membership_level->name!='Pro')
+            {
+                echo "<p class=error>You can not access this page.<br></p>";
+                exit;
+            }  
+        ?>
 	<?php 
               if(isset($_GET['error']) && $_GET['error']!='' && $_GET['error']=='location')
               {    ?>
                     <p class="error"><b>Error:</b> Location can not be empty.<br></p>
+              <?php }elseif(isset($_GET['error']) && $_GET['error']!='' && $_GET['error']=='invalid'){?>
+                    <p class="error"><b>Error:</b> Password dose not match.<br></p>
               <?php }else{
                   $template->the_errors();
               }
@@ -99,7 +108,7 @@ $profileuser = get_user_to_edit($current_user->ID);
 			<span class="description"><?php _e( 'Share a little biographical information to fill out your profile. This may be shown publicly.', 'theme-my-login' ); ?></span></td>
 		</tr>
 
-                <?php $experience_level_arr = array("I'm a busssion providing sporty/healthy living events","I want to learn a new sport",
+                <?php $experience_level_arr = array("I'm a business providing sporty/healthy living events","I want to learn a new sport",
                                                     "Just for fun/social meet ups","Beginner","Intermediate","Expert","Disabled");?>                
 		<tr>
 			<td><label for="experience_level"><?php _e( 'Experience Level', 'theme-my-login' ); ?></label></td>
@@ -161,7 +170,7 @@ $profileuser = get_user_to_edit($current_user->ID);
 			</td>
 		</tr>
                 <tr>
-			<td><label for="dire_to_venue"><?php _e( 'Direction to venue', 'theme-my-login' ); ?>*</label></td>
+			<td><label for="dire_to_venue"><?php _e( 'Direction to venue', 'theme-my-login' ); ?></label></td>
 			<td><input type="text" name="dire_to_venue" id="dire_to_venue" value="<?php echo esc_html( $profileuser->dire_to_venue ); ?>" autocomplete="off" />
 				
 			</td>
@@ -171,10 +180,7 @@ $profileuser = get_user_to_edit($current_user->ID);
                 <h3><?php _e( 'Contact Info', 'theme-my-login' ) ?></h3>
 
 		<table class="form-table">
-		<tr>
-			<td><label for="email"><?php _e( 'E-mail', 'theme-my-login' ); ?> <span class="description"><?php _e( '(required)', 'theme-my-login' ); ?></span></label></td>
-			<td><input type="text" name="email" id="email" disabled="disabled"  value="<?php echo esc_attr( $profileuser->user_email ) ?>" class="regular-text" /></td>
-		</tr>
+		
 
 		<tr>
 			<td><label for="url"><?php _e( 'Website', 'theme-my-login' ) ?></label></td>
@@ -204,6 +210,7 @@ $profileuser = get_user_to_edit($current_user->ID);
                 <?php }
                 ?>
                 
+               
                 
                 <?php
                        // do_action( 'show_user_profile', $profileuser );

@@ -64,7 +64,10 @@
   <div id="wrapper-inr">
     <!--HEADER-->
     <div class="header">
-      <div class="hedr-top"><a href="index.html" title="Home" class="logo-sp"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/logo.jpg" alt="Home" /></a>
+      <div class="hedr-top">
+          <span class="logo-sp">
+              <?php lm_display_logo(); ?>
+          </span>   
         <ul class="user-login">
             <?php 
             
@@ -72,7 +75,8 @@
             $user_role_var =  wp_get_current_user()->membership_level->name;?>
          <?php if (is_user_logged_in()) { ?> 
                          
-			 <li><a href="<?php echo wp_login_url();?>&action=profile&level=<?php echo $level_id_var;?>" title="Logout">Profile</a></li>
+			 <!--<li><a href="<?php echo wp_login_url();?>&action=profile&level=<?php echo $level_id_var;?>" title="Logout">Profile</a></li>-->
+                         <li><a href="<?php echo wp_login_url();?>&action=view" title="Profile">Profile</a></li>
                          
 			<li><a href="<?php echo wp_logout_url( $redirect ); ?>" title="Logout">Logout</a></li>
 		<?php }else{  ?> 
@@ -80,12 +84,32 @@
 		<? } ?>
 
 	
-          <li class="no-marg-rgt"><a href="#" title="Submit Events">Submit Events</a></li>
+          <li class="no-marg-rgt"><a href="<?php echo get_permalink('25');?>" title="Submit Events">Submit Events</a></li>
         </ul>
         <div class="spacer"></div>
         <!--NNAVIGATION-->
-        <div class="nav-sp">
+        <div id="nav">
          <?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_class' => 'nav-menu' ) ); ?>
+            <ul>
+                <li>
+                    <a href="#">Account Settings</a>
+                    <ul>
+                        <li>
+                    <a href="<?php echo wp_login_url().'&action=profile&level='.$level_id_var?>">Manage my profile</a>
+                </li>
+                <li>
+                    <a href="<?php echo wp_login_url().'&action=preference' ?>">Manage my email preference</a>
+                </li>
+                <li>
+                    <a href="#">Delete my account</a>
+                </li>
+                <li>
+                    <a href="<?php echo get_permalink('5');?>">Manage my subscription</a>
+                </li>
+                    </ul>
+                </li>
+                
+            </ul> 
         </div>
         <!--/NAVIGATION-->
         <div class="spacer"></div>

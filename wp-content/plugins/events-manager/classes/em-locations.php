@@ -17,7 +17,7 @@ class EM_Locations extends EM_Object implements Iterator {
 	 * @param boolean $return_objects
 	 * @return array
 	 */
-	function get( $args = array(), $count=false ){ 	
+	function get( $args = array(), $count=false ){ 
 		global $wpdb;
 		$events_table = EM_EVENTS_TABLE;
 		$locations_table = EM_LOCATIONS_TABLE;
@@ -51,7 +51,7 @@ class EM_Locations extends EM_Object implements Iterator {
 		//Put it all together
 		$EM_Location = new EM_Location(0); //Empty class for strict message avoidance
 		$fields = $locations_table .".". implode(", {$locations_table}.", array_keys($EM_Location->fields));
-		$where = ( count($conditions) > 0 ) ? " WHERE " . implode ( " AND ", $conditions ):'';
+		$where .= ( count($conditions) > 0 ) ? " WHERE " . implode ( " AND ", $conditions ):''; 
 		
 		//Get ordering instructions
 		$EM_Event = new EM_Event(); //blank event for below
@@ -183,7 +183,7 @@ class EM_Locations extends EM_Object implements Iterator {
 	 * @param array $args
 	 * @return array
 	 */
-	function build_sql_conditions( $args = array(), $count=false ){
+	function build_sql_conditions( $args = array(), $count=false ){ 
 		global $wpdb;
 		$events_table = EM_EVENTS_TABLE;
 		$locations_table = EM_LOCATIONS_TABLE;
@@ -195,6 +195,54 @@ class EM_Locations extends EM_Object implements Iterator {
 		}elseif( true == $args['eventless'] ){
 			$conditions['eventless'] = "{$events_table}.event_id IS NULL";
 		}
+
+/*condition for location postcode :start by user2*/
+
+		if(!empty($args['postcode'])){ 
+			$conditions['locationpostcode'] .= "(";
+				$conditions['locationpostcode'] .= "location_postcode='{$args['postcode']}'";			
+			$conditions['locationpostcode'] .= ")";
+		}
+
+/*condition for location postcode :end by user2*/
+
+
+/*condition for event type :start by user2*/
+		if(!empty($args['type'])){
+			$event_types = explode(",", $args['type']);
+			$counter_opt = count($event_types);
+			$counter_or = '0';
+			$conditions['eventtype'] .= "(";
+			foreach($event_types as $event_type){ 
+			$counter_or++;
+				$conditions['eventtype'] .= "event_types='{$event_type}'";			
+				if($counter_or != $counter_opt){
+					$conditions['eventtype'] .= " OR ";					
+				}
+			}
+			$conditions['eventtype'] .= ")";
+		}
+/*condition for event type :end by user2*/
+
+/*condition for sports  :start by user2*/
+		if(!empty($args['sports'])){
+			$sports_category = explode(",", $args['sports']);
+			$counter_sports = count($sports_category);
+			$counter_or = '0';
+			$conditions['sports'] .= "(";
+			foreach($counter_sports as $sports){ 
+			$counter_or++;
+				$conditions['sports'] .= "event_types='{$sports}'";			
+				if($counter_or != $counter_sports){
+					$conditions['sports'] .= " OR ";					
+				}
+			}
+			$conditions['sports'] .= ")";
+		}
+/*condition for sports  :end by user2*/
+
+
+
 		//owner lookup
 		if( !empty($args['owner']) && is_numeric($args['owner'])){
 			$conditions['owner'] = "location_owner=".$args['owner'];
@@ -266,7 +314,11 @@ class EM_Locations extends EM_Object implements Iterator {
 			'blog' => get_current_blog_id(),
 			'private' => current_user_can('read_private_locations'),
 			'private_only' => false,
-			'post_id' => false
+			'post_id' => false,
+			'type' => false,
+			'postcode'=>false,
+			'sports'=>false,
+
 		);
 		if( EM_MS_GLOBAL && get_site_option('dbem_ms_mainblog_locations') ){
 		    if( empty($array['blog']) && !is_main_site() ){

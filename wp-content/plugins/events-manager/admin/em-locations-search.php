@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*
  * This page will search for either a specific location via GET "id" variable 
  * or will search for events by name via the GET "q" variable.

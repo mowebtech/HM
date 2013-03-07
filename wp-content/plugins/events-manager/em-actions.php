@@ -3,7 +3,7 @@
  * Performs actions on init. This works for both ajax and normal requests, the return results depends if an em_ajax flag is passed via POST or GET.
  */
 function em_init_actions() {
-	global $wpdb,$EM_Notices,$EM_Event; 
+	global $wpdb,$EM_Notices,$EM_Event;  
 	if( defined('DOING_AJAX') && DOING_AJAX ) $_REQUEST['em_ajax'] = true;
 	
 	//NOTE - No EM objects are globalized at this point, as we're hitting early init mode.
@@ -33,17 +33,22 @@ function em_init_actions() {
 		    echo EM_Object::json_encode($result);
 			die();
 		}
-		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalMapData') {
-			$EM_Locations = EM_Locations::get( $_REQUEST );
+		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalMapData') { 
+echo EM_Events::outputjson($_REQUEST);	exit;					
+			$EM_Locations = EM_Locations::get( $_REQUEST ); 
 			$json_locations = array();
-			foreach($EM_Locations as $location_key => $EM_Location) {
+			foreach($EM_Locations as $location_key => $EM_Location) { 
 				$json_locations[$location_key] = $EM_Location->to_array();
+	
 				$json_locations[$location_key]['location_balloon'] = $EM_Location->output(get_option('dbem_map_text_format'));
+	
 			}
-
+		
 			echo EM_Object::json_encode($json_locations);
 		 	die();   
 	 	}
+
+	
 	
 		if(isset($_REQUEST['ajaxCalendar']) && $_REQUEST['ajaxCalendar']) {
 			//FIXME if long events enabled originally, this won't show up on ajax call

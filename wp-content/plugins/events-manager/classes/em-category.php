@@ -133,7 +133,7 @@ class EM_Category extends EM_Object {
 			switch( $result ){
 				case '#_CATEGORYNAME':
 					if($this->name != ""){
-						$replace = "<span>Sports : ".$this->name."</span>";  //by user2
+						$replace = "<br/><span><b style='color:#40477F'>Sports</b> : ".$this->name."</span>";  //by user2
 					}else{
 						$replace = $this->name;  //by user2
 					}

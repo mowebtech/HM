@@ -475,3 +475,34 @@ function restrict_admin(){
 }
 add_action( 'admin_init', 'restrict_admin');*/
 //End of code for wp-admin access only for admin
+
+//For redirect page in account setting
+/*add_shortcode('redirect', 'scr_do_redirect');
+function scr_do_redirect($atts)
+{
+    
+    if(isset($atts['url']))
+    {
+        
+        $url = '#';
+        switch ($atts['url']){
+            case 'profile':
+                $level_var = $user_role_var =  wp_get_current_user()->membership_level->id;
+                $url = wp_login_url().'&action=profile&level='.$level_var;
+                
+                break;
+           case 'preference':
+                $url = wp_login_url().'&action=preference';
+               break;
+           case 'delete_account':
+                $url = '#';
+               break;
+        }?>
+                <script type="text/javascript">        
+                    window.location = '<?php echo $url; ?>'; 
+                </script>    
+        <!--<meta http-equiv="refresh" content="<?php echo '0'; ?>; url=<?php echo $url; ?>">-->
+        
+        <?php
+    }    
+}*/

@@ -251,17 +251,32 @@ class EM_Object {
 				if( !get_option('dbem_events_current_are_past') ){
 					$conditions['scope'] .= " OR (event_start_date <= CAST('$tomorrow' AS DATE) AND event_end_date >= CAST('$tomorrow' AS DATE))";
 				}
-			}
 //start by user2 :: to add new scope of week
-			elseif ($scope == "week"){ 
+			}elseif ($scope == "week"){ 
 				$start_week = date('Y-m-d',current_time('timestamp'));
 				$end_week = date('Y-m-d',strtotime("+6 day", current_time('timestamp')));
 				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_week' AS DATE) AND CAST('$end_week' AS DATE))";
 				if( !get_option('dbem_events_current_are_past') ){
 					$conditions['scope'] .= " OR (event_start_date < CAST('$start_week' AS DATE) AND event_end_date >= CAST('$start_week' AS DATE))";
+				}
+
+			}elseif ($scope == "2-week"){ 
+				$start_week = date('Y-m-d',current_time('timestamp'));
+				$end_week = date('Y-m-d',strtotime("+13 day", current_time('timestamp')));
+				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_week' AS DATE) AND CAST('$end_week' AS DATE))";
+				if( !get_option('dbem_events_current_are_past') ){
+					$conditions['scope'] .= " OR (event_start_date < CAST('$start_week' AS DATE) AND event_end_date >= CAST('$start_week' AS DATE))";
+				}
+
+			}elseif ($scope == "3-week"){ 
+				$start_week = date('Y-m-d',current_time('timestamp'));
+				$end_week = date('Y-m-d',strtotime("+20 day", current_time('timestamp')));
+				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_week' AS DATE) AND CAST('$end_week' AS DATE))";
+				if( !get_option('dbem_events_current_are_past') ){
+					$conditions['scope'] .= " OR (event_start_date < CAST('$start_week' AS DATE) AND event_end_date >= CAST('$start_week' AS DATE))";
+				}							
 //end by user2 :: -----------------
 				
-				}				
 			}elseif ($scope == "month"){
 				$start_month = date('Y-m-d',current_time('timestamp'));
 				$end_month = date('Y-m-t',current_time('timestamp'));

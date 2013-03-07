@@ -1338,15 +1338,15 @@ class EM_Event extends EM_Object{
 					$replace = $this->event_name;
 					break;
 				case '#_EVENTTYPE':  //by user2
-					$replace = "<span>Type : ".$this->event_types."</span>"; 
+					$replace = "<br/><span><b style='color:#40477F'>Type</b> : ".$this->event_types."</span><br/>"; 
 					break;
-				case '#_CONTACTUSER':  //by user2
-					$replace = "<span>contact</span><br/>
-						    <a href='#'>P</a> |
-						    <a href='".$this->webtv_url."'>TV</a> |
-						    <a href='".$this->facebook_link."'>F</a> |
-						    <a href='".$this->twitter_link."'>T</a> |
-						    <a href='".$this->website_link."'>Web</a>"; 
+				case '#_CONTACTUSER':  //by user2 
+					$replace = "
+						    <a href='#'><img src='".plugins_url()."/events-manager/includes/images/hire-me.png' /></a>
+						    <a href='".$this->webtv_url."'><img src='".plugins_url()."/events-manager/includes/images/webtv16x16.png' /></a>
+						    <a href='".$this->facebook_link."'><img src='".plugins_url()."/events-manager/includes/images/facebook16x16.png' /></a>
+						    <a href='".$this->twitter_link."'><img src='".plugins_url()."/events-manager/includes/images/twitter16x16.png' /></a>
+						    <a href='".$this->website_link."'><img src='".plugins_url()."/events-manager/includes/images/web16x16.png' /></a>"; 
 					break;
 				case '#_NOTES': //depreciated
 				case '#_EXCERPT': //depreciated
@@ -1355,7 +1355,9 @@ class EM_Event extends EM_Object{
 					$replace = $this->post_content;
 					if($result == "#_EXCERPT" || $result == "#_EVENTEXCERPT"){
 						if( !empty($this->post_excerpt) ){
-							$replace = $this->post_excerpt;
+							$content = $this->post_excerpt;
+							
+							$replace = substr($content,0,4);
 						}else{
 							$matches = explode('<!--more', $this->post_content);
 							$replace = $matches[0];
@@ -1439,7 +1441,7 @@ class EM_Event extends EM_Object{
 				case '#_EVENTLINK': //HTML Link
 					$event_link = esc_url($this->get_permalink());
 					if($result == '#_LINKEDNAME' || $result == '#_EVENTLINK'){
-						$replace = '<a href="'.$event_link.'" title="'.esc_attr($this->event_name).'">'.esc_attr($this->event_name).'</a>';
+						$replace = '<a href="'.$event_link.'" title="'.esc_attr($this->event_name).'">'.esc_attr($this->event_name).'</a><br/>';
 					}else{
 						$replace = $event_link;	
 					}

@@ -7,12 +7,12 @@ global $EM_Event;
 /* @var $EM_Event EM_Event */ 
 $categories = EM_Categories::get(array('orderby'=>'name','hide_empty'=>0));
 ?>
+
 <?php if( count($categories) > 0 ): ?>
-<div class="event-categories">
-	<!-- START Categories -->
+<td>
 	<label for="event_categories[]"><?php _e ( 'Sport:', 'dbem' ); ?></label>
-<!-- by user2 : allow single selection on frontend -->
-<!--	<select name="event_categories[]" multiple size="10"> -->
+</td>
+<td>
 	<select name="event_categories[]" >
 	<?php
 	$selected = $EM_Event->get_categories()->get_ids();
@@ -20,6 +20,5 @@ $categories = EM_Categories::get(array('orderby'=>'name','hide_empty'=>0));
 	$args_em = array( 'hide_empty' => 0, 'name' => 'event_categories[]', 'hierarchical' => true, 'id' => EM_TAXONOMY_CATEGORY, 'taxonomy' => EM_TAXONOMY_CATEGORY, 'selected' => $selected, 'walker'=> $walker);
 	echo walk_category_dropdown_tree($categories, 0, $args_em);
 	?></select>
-	<!-- END Categories -->
-</div>
+</td>
 <?php endif; ?>
